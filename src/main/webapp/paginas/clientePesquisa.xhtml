@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<div class="ui-fluid">
+
+			<h:form id="formularioTabelaCliente">
+
+				<p:dataTable id="tabelaCliente" var="cliente"
+					value="#{clienteBean.listaClientes}" paginator="true" rows="6"
+					emptyMessage="Nenhum cliente encontrado">
+
+					<f:facet name="header">
+            			Tabela de clientes
+        			</f:facet>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo"
+							action="#{clienteBean.formularioNovo}" />
+					</f:facet>
+
+					<p:column style="width:5%">
+						<p:commandButton icon="ui-icon-search" title="Pesquisar"
+							oncomplete="PF('dialogo').show();" update=":formularioDialago">
+							<f:setPropertyActionListener value="#{cliente}"
+								target="#{clienteBean.cliente}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column headerText="Nome" filterBy="#{cliente.nome}"
+						filterMatchMode="contains" sortBy="#{cliente.nome}">
+						<h:outputText value="#{cliente.nome}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<h:panelGrid columns="2">
+
+							<p:commandButton value="Excluir"
+								actionListener="#{clienteBean.excluir(cliente)}"
+								update="formularioTabelaCliente" />
+
+							<p:commandButton value="Editar"
+								action="#{clienteBean.editar(cliente)}" />
+
+						</h:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+
+			<p:dialog id="dialog" appendTo="@(body)" closable="true"
+				resizable="false" draggable="false" header="Cliente" modal="true"
+				widgetVar="dialogo">
+
+				<h:form id="formularioDialago">
+
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="Nome: " />
+						<p:inputText value="#{clienteBean.cliente.nome}" readonly="true" />
+
+						<p:outputLabel value="Sexo: " />
+						<p:inputText value="#{clienteBean.cliente.sexo}" readonly="true" />
+
+						<p:outputLabel value="Pessoa: " />
+						<p:inputText value="#{clienteBean.cliente.tipoPessoa}"
+							readonly="true" />
+
+						<p:outputLabel value="CPF: " />
+						<p:inputText value="#{clienteBean.cliente.cpf}" readonly="true" />
+
+						<p:outputLabel value="CNPJ: " />
+						<p:inputText value="#{clienteBean.cliente.cnpj}" readonly="true" />
+
+						<p:outputLabel value="Observação: " />
+						<p:inputText value="#{clienteBean.cliente.observacao}"
+							readonly="true" />
+
+						<p:outputLabel value="Cidade: " />
+						<p:inputText value="#{clienteBean.cliente.endereco.cidade}"
+							readonly="true" />
+
+						<p:outputLabel value="Bairro: " />
+						<p:inputText value="#{clienteBean.cliente.endereco.bairro}"
+							readonly="true" />
+
+						<p:outputLabel value="Numero Casa: " />
+						<p:inputText value="#{clienteBean.cliente.endereco.numeroCasa}"
+							readonly="true" />
+
+					</h:panelGrid>
+
+				</h:form>
+
+			</p:dialog>
+
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<div class="ui-fluid">
+			<h:form id="formularioFuncionarioTabela">
+				<p:growl id="mensagem" showDetail="true" sticky="true" />
+				<p:dataTable id="tabeleFuncionario" var="funcionario"
+					value="#{funcionarioBean.listaFuncionarios}"
+					emptyMessage="Nenhum funcionario encontrado" paginator="true"
+					rows="8">
+
+					<f:facet name="header">
+						Tabela de funcionarios
+					</f:facet>
+
+					<f:facet name="footer">
+						<p:commandButton value="Novo"
+							action="#{funcionarioBean.formularioNovo}" />
+					</f:facet>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{funcionario.nome}" />
+					</p:column>
+
+					<p:column headerText="Departamento">
+						<h:outputText value="#{funcionario.departamento}" />
+					</p:column>
+
+					<p:column headerText="CPF">
+						<h:outputText value="#{funcionario.cpf}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:panelGrid columns="2">
+							<p:commandButton value="Excluir"
+								actionListener="#{funcionarioBean.excluir(funcionario)}"
+								update="formularioFuncionarioTabela" />
+
+							<p:commandButton value="Editar"
+								action="#{funcionarioBean.carregar(funcionario)}" />
+						</p:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

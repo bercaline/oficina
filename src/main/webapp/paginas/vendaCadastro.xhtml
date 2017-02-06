@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+		<div class="ui-fluid">
+
+			<h:form id="formularioVenda">
+				<p:growl id="mensagem" showDetail="true" sticky="true" />
+				<p:dataTable id="tabelaVenda" paginator="true" rows="3"
+					emptyMessage="Nenhum produto encontrado" var="produto"
+					value="#{vendaBean.listaProdutos}">
+
+					<f:facet name="header">
+                    Tabela de produtos
+                </f:facet>
+
+					<p:column headerText="Produto">
+						<h:outputText value="#{produto.nome}" />
+					</p:column>
+
+					<p:column headerText="Preço">
+						<h:outputText value="#{produto.preco}" />
+					</p:column>
+
+					<p:column headerText="Quantidade">
+						<h:outputText value="#{produto.quantidade}" />
+					</p:column>
+
+					<p:column headerText="Fornecedor">
+						<h:outputText value="#{produto.fornecedor.nome}" />
+					</p:column>
+
+					<p:column headerText="Adicionar Item">
+						<p:commandButton value="Adicionar"
+							actionListener="#{vendaBean.adicionarProduto(produto)}"
+							update=":formularioVenda:tblItens :formularioVenda:painelVenda" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:separator />
+
+
+				<p:dataTable id="tblItens" paginator="true" rows="3"
+					emptyMessage="Nenhum item encontrado" var="item"
+					value="#{vendaBean.itens}">
+
+					<p:column headerText="Produto Código">
+						<h:outputText value="#{item.produto.codigo}" />
+					</p:column>
+
+					<p:column headerText="Produto">
+						<h:outputText value="#{item.produto.nome}" />
+					</p:column>
+
+					<p:column headerText="Quantidade">
+						<h:outputText value="#{item.quantidade}" />
+					</p:column>
+
+					<p:column headerText="Valor Parcial">
+						<h:outputText value="#{item.valorParcial}" />
+					</p:column>
+
+					<p:column headerText="Fornecedor">
+						<h:outputText value="#{item.produto.fornecedor.nome}" />
+					</p:column>
+
+					<p:column headerText="Remover Item">
+						<p:commandButton value="Remover"
+							actionListener="#{vendaBean.remover(item)}"
+							update=":formularioVenda:tblItens :formularioVenda:painelVenda" />
+					</p:column>
+
+				</p:dataTable>
+
+				<h:panelGrid columns="3" id="painelVenda">
+
+					<p:outputLabel value="Valor total: " for="valor" />
+					<p:inputText id="valor" value="#{vendaBean.venda.valorTotal}"
+						readonly="true" size="11" />
+
+					<p:commandButton value="Finalizar venda"
+						actionListener="#{vendaBean.carregarDadosVenda}"
+						oncomplete="PF('finalizar').show();"
+						update=":formularioVenda :dialog" />
+
+				</h:panelGrid>
+			</h:form>
+
+			<p:dialog id="dialog" appendTo="@(body)" header="Finalizar venda"
+				closable="true" modal="true" resizable="false" draggable="false"
+				widgetVar="finalizar">
+				<h:form>
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Data: " />
+						<p:inputText readonly="true"
+							value="#{vendaBean.venda.horario.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</p:inputText>
+
+						<p:outputLabel value="Funcionario: " />
+						<p:inputText value="#{vendaBean.venda.funcionario.nome}"
+							readonly="true" />
+
+						<p:outputLabel value="Valor total: " />
+						<p:inputText readonly="true" value="#{vendaBean.venda.valorTotal}" />
+						<p:commandButton value="Finalizar"
+							actionListener="#{vendaBean.salvar}" update="formularioVenda"
+							onclick="PF('finalizar').hide();" />
+						<p:commandButton value="Voltar" onclick="PF('finalizar').hide();" />
+					</h:panelGrid>
+
+				</h:form>
+
+
+			</p:dialog>
+		</div>
+
+	</ui:define>
+</ui:composition>
+
+</html>

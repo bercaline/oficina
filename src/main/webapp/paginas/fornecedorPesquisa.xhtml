@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+	<ui:define name="conteudo">
+
+		<div class="ui-fluid">
+
+			<h:form id="formularioTabelaFornecedor">
+
+				<p:growl id="mensagem" showDetail="true" sticky="true" />
+
+				<p:dataTable id="tabelaFornecedor" rows="8" var="fornecedor"
+					value="#{fornecedorBean.listaFornecedores}"
+					emptyMessage="Nenhum fornecedor encontrado">
+
+					<f:facet name="header">
+						Tabela de fornecedores
+					</f:facet>
+
+					<f:facet name="footer">
+						<p:commandButton action="#{fornecedorBean.formularioNovo}"
+							value="Novo" />
+					</f:facet>
+
+					<p:column headerText="Nome">
+						<h:outputText value="#{fornecedor.nome}" />
+					</p:column>
+
+					<p:column headerText="Celular">
+						<h:outputText value="#{fornecedor.celular}" />
+					</p:column>
+
+
+
+					<p:column headerText="Opções">
+						<p:panelGrid columns="2">
+
+							<p:commandButton value="Excluir"
+								actionListener="#{fornecedorBean.excluir(fornecedor)}"
+								update="formularioTabelaFornecedor" />
+
+							<p:commandButton value="Alterar"
+								action="#{fornecedorBean.carregar(fornecedor)}" />
+
+						</p:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</div>
+
+	</ui:define>
+</ui:composition>
+
+</html>
